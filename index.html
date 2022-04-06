@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Embeddable Form</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+			integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<style type="text/css">
+			*,
+			*::after,
+			*::before {
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 1rem;
+				line-height: 1.5;
+				color: #333;
+				margin: 0;
+				padding: 0;
+				background: #f5f5f5;
+			}
+			@media screen and (min-width: 768px) {
+				body {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+			}
+			.container {
+				width: 400px;
+				/* margin: 0 auto; */
+			}
+			.heading {
+				text-align: center;
+				margin-top: 20px;
+				margin-bottom: 20px;
+				text-transform: uppercase;
+				color: #473f6e;
+				font-size: 1.2rem;
+			}
+			form {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			input[type="text"],
+			input[type="email"],
+			input[type="tel"],
+			input[type="url"],
+			input[type="number"],
+			input[type="date"],
+			textarea,
+			select {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 14px;
+				line-height: 1.5;
+				color: #bdbacb;
+				margin: 0;
+				margin-bottom: 20px;
+				padding: 10px 20px;
+				border-radius: 50px;
+				width: 100%;
+				border: none;
+				font-weight: bold;
+				display: inline-block;
+			}
+			.textarea {
+				height: 100px;
+				resize: none;
+				border-radius: 10px;
+			}
+			.btn {
+				background-color: #817ffe;
+				color: #fff;
+				border-radius: 50px;
+				padding: 20px 30px;
+				border: none;
+				display: inline-block;
+				margin: 0 auto;
+				margin-top: 20px;
+				width: 30%;
+				font-weight: bold;
+				cursor: pointer;
+				text-transform: uppercase;
+			}
+			.thank-you {
+				/* display:none; */
+				text-align: center;
+				margin-top: 20px;
+				margin-bottom: 20px;
+				text-transform: uppercase;
+				color: #1c6630;
+				font-size: 1.2rem;
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="heading">SEND US A MESSAGE</h1>
+			<form action="#" id="messages" OnSubmit="sendMessage(event)">
+				<input type="text" required id="name" placeholder="Full name" />
+				<input type="text" required id="email" placeholder="E-mail" />
+				<input type="text" id="phone" placeholder="Phone" />
+				<textarea
+					id="message"
+					placeholder="Message"
+					class="textarea"
+                    required
+				></textarea>
+				<button class="btn" id="submit">
+					<i class="fa-solid fa-paper-plane"></i>&nbsp;send
+				</button>
+			</form>
+		</div>
+		<script type="text/javascript">
+			const submitBtn = document.getElementById("submit");
+			const sendMessage = async (event) => {
+				event.preventDefault();
+				let sender = messages.name.value;
+				let message = messages.message.value;
+				try {
+					let results = await fetch("/messages", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							sender: sender,
+							message: message,
+						}),
+					});
+					document.querySelector(".container").style.display = "none";
+					let data = await results.json();
+					messages.message.value = "";
+					messages.name.value = "";
+					console.log(data);
+				} catch (err) {
+					console.log(err);
+				}
+                thankYou()
+				console.log(`Full name ${sender} Message ${message}`);
+				// alert(`Full name ${sender} \r\nMessage ${message}`);
+			};
+
+			function thankYou() {
+				const thankyou = document.createElement("div");
+				thankyou.classList.add("thank-you");
+				const thankYouHeading = document.createElement(
+					"h1"
+				);
+                thankYouHeading.innerText = "Thank you for your submission!"
+				const thankYouBody = document.createElement(
+					"p"
+				);
+                thankYouBody.innerText = "We will be in touch with you shortly."
+				thankyou.appendChild(thankYouHeading);
+				thankyou.appendChild(thankYouBody);
+
+				document.body.appendChild(thankyou);
+			}
+		</script>
+	</body>
+</html>
