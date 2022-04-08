@@ -184,8 +184,7 @@
 				theBody.classList.add("thank-you-body");
 
 				theBody.innerHTML = `
-					<h1>Hi ${messages?.name?.value.split(' ')[0]}! <br/>Thank you for your message.</h1>
-					<p>We will get back to you as soon as possible.</p>
+					<p>Thank you ${messages?.name?.value.split(' ')[0]}! , We shall email you back at ${messages?.email?.value} address.</p>
 				`;
 
 				wrapper.appendChild(theBody);
