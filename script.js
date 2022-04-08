@@ -3,6 +3,7 @@ const sendMessage = async (event) => {
 	event.preventDefault();
 	let sender = messages.name.value;
 	let message = messages.message.value;
+
 	try {
 		let results = await fetch("/messages", {
 			method: "POST",
@@ -15,6 +16,7 @@ const sendMessage = async (event) => {
 			}),
 		});
 		document.querySelector(".container").style.display = "none";
+		// document.querySelector(".container").remove();
 		let data = await results.json();
 		messages.message.value = "";
 		messages.name.value = "";
@@ -22,24 +24,26 @@ const sendMessage = async (event) => {
 	} catch (err) {
 		console.log(err);
 	}
-	thankYou()
+
+	MyResponse()
+
 	console.log(`Full name ${sender} Message ${message}`);
 	// alert(`Full name ${sender} \r\nMessage ${message}`);
 };
 
-function thankYou() {
-	const thankyou = document.createElement("div");
-	thankyou.classList.add("thank-you");
-	const thankYouHeading = document.createElement(
-		"h1"
-	);
-	thankYouHeading.innerText = "Thank you for your submission!"
-	const thankYouBody = document.createElement(
-		"p"
-	);
-	thankYouBody.innerText = "We will be in touch with you shortly."
-	thankyou.appendChild(thankYouHeading);
-	thankyou.appendChild(thankYouBody);
+function MyResponse() {
 
-	document.body.appendChild(thankyou);
+	const wrapper = document.createElement("section");
+	wrapper.classList.add("thank-you-wrapper");
+
+	const theBody = document.createElement("div");
+	theBody.classList.add("thank-you-body");
+
+	theBody.innerHTML = `
+		<h1>Hi ${messages?.name?.value.split(' ')[0]}! <br/>Thank you for your message.</h1>
+		<p>We will get back to you as soon as possible.</p>
+	`;
+
+	wrapper.appendChild(theBody);
+	document.body.appendChild(wrapper);
 }
